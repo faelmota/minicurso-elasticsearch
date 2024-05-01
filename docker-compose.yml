@@ -1,0 +1,55 @@
+version: "3.8"
+
+services:
+    kibana: 
+        image: docker.elastic.co/kibana/kibana:7.17.8
+        container_name: kibana
+        restart: always
+        ports:
+            - "5601:5601"
+        environment:
+            ELASTICSEARCH_HOSTS: "http://elastic:9200"
+            ELASTICSEARCH_URL: "http://elastic:9200"
+            XPACK_MONITORING_ENABLED: "true"
+            XPACK_MONITORING_COLLECTION_ENABLED: "true"
+            XPACK_SECURITY_ENABLED: "true"
+            ELASTICSEARCH_USERNAME: "elastic"
+            ELASTICSEARCH_PASSWORD: "elastic"
+        depends_on:
+            - elastic
+        deploy:
+            resources:  
+                limits:
+                    cpus: '0.5'
+                    memory: '512MB'
+
+    elastic:
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.17.8
+        container_name: elastic
+        restart: always
+        ports:
+            - "9200:9200"
+        environment:
+            node.name: "elastic"
+            discovery.type: "single-node"
+            xpack.security.enabled: "true"
+            ELASTIC_PASSWORD: "elastic"
+            ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+        ulimits:
+            memlock:
+                soft: -1
+                hard: -1
+            nofile:
+                soft: 65536
+                hard: 65536
+        volumes:
+            - elastic:/usr/share/elasticsearch/data
+        deploy:
+            resources:  
+                limits:
+                    cpus: '1'
+                    memory: '512MB'
+
+volumes:
+    elastic:
+        driver: local
