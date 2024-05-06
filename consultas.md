@@ -211,44 +211,47 @@ GET /produtos/_search
 
 ```
 
-GET /produtos/\_search
+GET /produtos/_search
 {
-"query": {
-"prefix": {
-"descricao.keyword": {
-"value": "sabao",
-"case_insensitive": true
-}
-}
-}
+    "query": {
+        "prefix": {
+            "descricao.keyword": {
+                "value": "sabao",
+                "case_insensitive": true
+            }
+        }
+    }
 }
 
 ```
 
 #Pesquisa utilizando wildcards
-GET /produtos/\_search
+
+```
+GET /produtos/_search
 {
-"query": {
-"wildcard": {
-"descricao.keyword": {
-"value": "leite\*",
-"case_insensitive": true
+    "query": {
+        "wildcard": {
+            "descricao.keyword": {
+                "value": "leite*",
+                "case_insensitive": true
+            }
+        }
+    }
 }
-}
-}
-}
+```
 
 #pesquisa por termos utilizando a logica or
 
 ```
 
-GET /produtos/\_search
+GET /produtos/_search
 {
-"query": {
-"match": {
-"descricao": "condensado lata"
-}
-}
+    "query": {
+        "match": {
+            "descricao": "condensado lata"
+        }
+    }
 }
 
 ```
@@ -257,16 +260,16 @@ GET /produtos/\_search
 
 ```
 
-GET /produtos/\_search
+GET /produtos/_search
 {
-"query": {
-"match": {
-"descricao": {
-"query": "lata condensado",
-"operator": "and"
-}
-}
-}
+    "query": {
+        "match": {
+            "descricao": {
+                "query": "lata condensado",
+                "operator": "and"
+            }
+        }
+    }
 }
 
 ```
@@ -275,13 +278,13 @@ GET /produtos/\_search
 
 ```
 
-GET /produtos/\_search
+GET /produtos/_search
 {
-"query": {
-"match_phrase": {
-"descricao": "condensado leite"
-}
-}
+    "query": {
+        "match_phrase": {
+            "descricao": "leite condensado"
+        }
+    }
 }
 
 ```
@@ -290,68 +293,64 @@ GET /produtos/\_search
 
 ```
 
-GET /produtos/\_search
+GET /produtos/_search
 {
-"size": 0,
-"aggs": {
-"categoria": {
-"terms": {
-"field": "categoria.keyword"
-},
-
-      "aggs": {
-        "preco_medio": {
-          "avg": {
-            "field": "preco"
-          }
-        },
-        "qtde_estoque": {
-          "sum": {
-            "field": "qtde_estoque"
-          }
+    "size": 0,
+    "aggs": {
+        "categoria": {
+            "terms": {
+                "field": "categoria.keyword"
+            },
+            "aggs": {
+                "preco_medio": {
+                    "avg": {
+                        "field": "preco"
+                    }
+                },
+                "qtde_estoque": {
+                    "sum": {
+                        "field": "qtde_estoque"
+                    }
+                }
+            }
         }
-      }
     }
-
-}
 }
 
 ```
 
 #ordena os resultados da consulta agregada
-GET /produtos/\_search
-{
-"size": 0,
-"aggs": {
-"categoria": {
-"terms": {
-"field": "categoria.keyword"
-},
-
-      "aggs": {
-        "preco_medio": {
-          "avg": {
-            "field": "preco"
-          }
-        },
-        "qtde_estoque": {
-          "sum": {
-            "field": "qtde_estoque"
-          }
-        },
-        "ordem_qtde_estoque": {
-          "bucket_sort": {
-            "sort": [{
-              "qtde_estoque": "desc"
-            }]
-          }
-        }
-      }
-    }
-
-}
-}
 
 ```
+GET /produtos/_search
+{
+    "size": 0,
+    "aggs": {
+        "categoria": {
+            "terms": {
+                "field": "categoria.keyword"
+            },
+            "aggs": {
+                "preco_medio": {
+                    "avg": {
+                        "field": "preco"
+                    }
+                },
+                "qtde_estoque": {
+                    "sum": {
+                        "field": "qtde_estoque"
+                    }
+                },
+                "ordem_qtde_estoque": {
+                    "bucket_sort": {
+                        "sort": [{
+                            "qtde_estoque": "desc"
+                        }]
+                    }
+                }
+            }
+        }
+    }
+}
 
 ```
