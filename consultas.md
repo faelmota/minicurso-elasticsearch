@@ -8,7 +8,8 @@ POST /produtos/_doc
   "categoria": "Móveis",
   "subcategoria": "Mesas",
   "preco": 599.99,
-  "estoque": 10
+  "estoque": 10,
+  "criado_em": "2024-05-08T11:00:59-0300"
 }
 ```
 
@@ -159,7 +160,7 @@ GET /produtos/_search
 {
   "query": {
     "term": {
-      "tags.keyword": {
+      "categoria.keyword": {
         "value": "pereciveis",
         "case_insensitive": true
       }
